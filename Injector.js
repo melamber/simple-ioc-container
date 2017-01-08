@@ -41,9 +41,9 @@ module.exports = class Injector {
      * @param {...Object} dependencies - Params of a dependence. Description:
      *     {
      *         key(required): {string} dependence key;
-     *         type(required): {enum} [class, value, singleton];
+     *         type(required): {enum} ["class", "value", "singleton"];
      *         value(required): {*};
-     *         args(optional): arguments to bind to a constructor.
+     *         args(optional): {Array} arguments to bind to a constructor.
      *         force(optional): {bool} registers forcefully if true, otherwise
      *             doesn't. Default false;
      *         onRegister(optional): {callback} Invokes if dependence is
@@ -87,7 +87,7 @@ module.exports = class Injector {
      * @param {Object} dependence - Dependence params.
      *                              See {@link Injector#register}.
      * @param {Boolean} needConstructor - Returns constructor if true
-     *                                    otherwise instance. (optional)
+     *                                    otherwise instance. Default false.
      * @returns {*} Dependence.
      */
     __resolve(dependence, needConstructor = false) {
