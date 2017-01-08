@@ -1,0 +1,96 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "simple-ioc-container",
+        "scope": null,
+        "escapedName": "simple-ioc-container",
+        "name": "simple-ioc-container",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/var/www/csgoteam"
+    ]
+  ],
+  "_from": "simple-ioc-container@latest",
+  "_id": "simple-ioc-container@1.0.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/simple-ioc-container",
+  "_nodeVersion": "6.4.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/simple-ioc-container-1.0.0.tgz_1483812086261_0.8171413319651037"
+  },
+  "_npmUser": {
+    "name": "melamber",
+    "email": "anton.shramkov@gmail.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "simple-ioc-container",
+    "scope": null,
+    "escapedName": "simple-ioc-container",
+    "name": "simple-ioc-container",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/simple-ioc-container/-/simple-ioc-container-1.0.0.tgz",
+  "_shasum": "a0ecf0ed57869bdf2a3c23bbaf5b518f9ec232bb",
+  "_shrinkwrap": null,
+  "_spec": "simple-ioc-container",
+  "author": {
+    "name": "melamber",
+    "email": "anton.shramkov@mail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/melamber/simple-ioc-container/issues"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "engine-strict": true,
+  "dependencies": {},
+  "description": "Simple DI Container",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "a0ecf0ed57869bdf2a3c23bbaf5b518f9ec232bb",
+    "tarball": "https://registry.npmjs.org/simple-ioc-container/-/simple-ioc-container-1.0.0.tgz"
+  },
+  "gitHead": "51ff7b91325b7465c7e44ef1c045edbb1f045942",
+  "homepage": "https://github.com/melamber/simple-ioc-container",
+  "keywords": [
+    "DI",
+    "IoC",
+    "container",
+    "dependency injection",
+    "inversion of control"
+  ],
+  "license": "MIT License",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "melamber",
+      "email": "anton.shramkov@gmail.com"
+    }
+  ],
+  "name": "simple-ioc-container",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melamber/simple-ioc-container.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}
