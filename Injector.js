@@ -196,7 +196,7 @@ module.exports = class Injector {
      * Note: a dependence has to have a constructor.
      *
      * @param {*} key - Key to get a dependence for.
-     * @param {boolean} value - Arguments to bind to a constructor.
+     * @param {*} value - Custom constructor.
      *
      * @returns {Function} Dependence constructor.
      * @throws Error
