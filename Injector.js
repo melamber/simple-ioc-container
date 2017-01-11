@@ -211,12 +211,20 @@ module.exports = class Injector {
             if (typeof target == "function") {
                 return target;
             } else if (typeof target == "string") {
-                return require(target);
+                let constructor = require(target);
+
+                if (constructor && constructor.__esModule) {
+                    constructor = target.default;
+                }
+
+                if (typeof constructor == "function") {
+                    return constructor;
+                }
             } else if (typeof target == "object") {
                 return target.constructor;
-            } else {
-                throw new Error("This is not constructor.");
             }
+
+            throw new Error("This is not constructor.");
         } catch (e) {
             console.error(e);
             console.error(`Undefined key ${key}`);
