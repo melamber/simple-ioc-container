@@ -1,34 +1,36 @@
 # Simple IoC Container
 ###Dependencies: [Proxy](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object.
-###Installation:
+##Installation:
 ````
 npm i simple-ioc-container --save
 ````
-###API
+##API
 
-####register(...dependencies)
+###register(...dependencies)
 Registers dependence(ies) in a container with specified params.
 * dependencies {...Object} dependencies - Params of a dependence. Description:
-  * key(required): {string} dependence key;
-  * type(required): {enum} ["class", "value", "singleton"];
-  * value(required): {*};
-  * args(optional): {Array} arguments to bind to a constructor.
-  * force(optional): {bool} registers forcefully if true, otherwise doesn't. Default false;
-  * onRegister(optional): {callback} Invokes if dependence is successfully 
+  * key[required]: {string} dependence key;
+  * type[required]: {enum} ["class", "value", "singleton"];
+  * value[required]: {*} Any data. Module will be connected if a type is "class"
+   or "singleton" and a value is set like a string;
+  * args[optional]: {Array} arguments to bind to a constructor.
+  * force[optional]: {bool} registers forcefully if true, otherwise doesn't. 
+  Default false;
+  * onRegister[optional]: {callback} Invokes if dependence is successfully 
   registered.
 
 Returns an Injector instance (this).
 
 
-####get(key)
+###get(key)
 Returns a dependence by a key.
 * key {*} Key to get a dependence for.
 
 Returns a dependence.
 
 
-####new(key, [...args])
-Returns a dependence after initialize it throw its constructor. Note: a 
+###new(key, [...args])
+Returns a dependence after initialize it through its constructor. Note: a 
 dependence has to have a constructor.
 * key {*} Key to get a dependence for.
 * args {...*} Arguments to bind to a constructor.
@@ -36,14 +38,16 @@ dependence has to have a constructor.
 Returns a dependence.
 
 
-####getConstructor(key, [value = null])
+###getConstructor(key, [value])
 Returns a dependence constructor.
 Note: a dependence has to have a constructor.
+* key {*} Key to get a dependence for.
+* value {*} Custom constructor or path to a constructor. Default is null.
 
 Returns a dependence constructor.
 
 
-####Examples
+###Examples
 
 ````javascript
 // di.js
@@ -73,7 +77,7 @@ di
     })
     .register({
         key: "db",
-        type: CONTAINER_TYPE_VALUE,
+        type: "value", // might be specified without any constants
         value: require("./lib/mongoose").default,
         onRegister() {
             require(__dirname + "/models");
@@ -81,7 +85,7 @@ di
     })
     .register({
         key: "UserService",
-        type: "class", // might be specified without any constants
+        type: CONTAINER_TYPE_CLASS,
         value: require(__dirname + "/../services/UserService"),
         args: ["admin"]
     });
@@ -108,7 +112,7 @@ import di from "../di";
 const db = di.get("db");
 const config = di.get("config");
 
-exports.module = class UserService {
+module.exports = class UserService {
    
     constructor(role, id) {
         // role will be "admin" (from di)

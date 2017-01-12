@@ -196,7 +196,7 @@ module.exports = class Injector {
      * Note: a dependence has to have a constructor.
      *
      * @param {*} key - Key to get a dependence for.
-     * @param {*} value - Custom constructor.
+     * @param {*} value - Custom constructor or path to a constructor.
      *
      * @returns {Function} Dependence constructor.
      * @throws Error
@@ -206,7 +206,7 @@ module.exports = class Injector {
             let target = (value
                     ? value
                     : this.__resolve(this.__container.get(key), true)
-            );
+                );
 
             if (typeof target == "function") {
                 return target;
