@@ -1,8 +1,8 @@
 const constants = require("./constants");
 const checkableTypes = {
     [constants["CONTAINER_TYPE_VALUE"]]: true,
-    [constants["CONTAINER_TYPE_CLASS"]]: true,
-    [constants["CONTAINER_TYPE_SINGLETON"]]: true,
+    [constants["CONTAINER_TYPE_FACTORY"]]: true,
+    [constants["CONTAINER_TYPE_SERVICE"]]: true,
 };
 
 /**
@@ -30,9 +30,23 @@ module.exports = class Injector {
             __proto__: null
         });
 
+        this.__setProxy();
+
         if (dependencies.length > 0) {
             this.register(dependencies);
         }
+    }
+
+    /**
+     * Sets proxy.
+     * @protected
+     */
+    __setProxy() {
+        this.proxy = new Proxy(this, {
+            get(target, prop) {
+                return target.get(prop);
+            }
+        });
     }
 
     /**
@@ -88,19 +102,21 @@ module.exports = class Injector {
      *                              See {@link Injector#register}.
      * @param {Boolean} needConstructor - Returns constructor if true
      *                                    otherwise instance. Default false.
+     * @param {...*} args - Arguments to bind to a constructor.
+     *
      * @returns {*} Dependence.
      */
-    __resolve(dependence, needConstructor = false) {
+    __resolve(dependence, args = [], needConstructor = false) {
         let Constructor;
 
         switch (dependence.type) {
         case constants["CONTAINER_TYPE_VALUE"]:
             return dependence.value;
-        case constants["CONTAINER_TYPE_CLASS"]:
+        case constants["CONTAINER_TYPE_FACTORY"]:
             Constructor = this.__issueConstructor(dependence);
 
-            return needConstructor ? Constructor : new Constructor;
-        case constants["CONTAINER_TYPE_SINGLETON"]:
+            return needConstructor ? Constructor : new Constructor(...args);
+        case constants["CONTAINER_TYPE_SERVICE"]:
             if (typeof dependence.value == "object") {
                 return needConstructor
                     ? dependence.value.constructor
@@ -115,8 +131,8 @@ module.exports = class Injector {
 
             this.register({
                 key: dependence.key,
-                type: constants["CONTAINER_TYPE_SINGLETON"],
-                value: new Constructor,
+                type: constants["CONTAINER_TYPE_SERVICE"],
+                value: new Constructor(...args),
                 force: true
             });
 
@@ -133,24 +149,14 @@ module.exports = class Injector {
      * @returns {*} Constructor with bound args.
      */
     __issueConstructor(dependence) {
-        let Constructor = this.getConstructor(null, dependence.value),
-            dependencies = [];
-
-        if (dependence.args) {
-            dependence.args.forEach(val => {
-                if (this.__container.has(val)) {
-                    val = this.__resolve(this.__container.get(val));
-                }
-
-                dependencies.push(val);
-            })
-        }
+        const Constructor = this.getConstructor(null, dependence.value);
+        const proxy = this.proxy;
 
         return new Proxy(Constructor, {
             construct(target, args) {
-                return new target.prototype.constructor(
-                    ...dependencies.concat(args)
-                );
+                args.unshift(proxy);
+
+                return new target(...args);
             }
         });
     }
@@ -159,35 +165,16 @@ module.exports = class Injector {
      * Returns a dependence by a key.
      *
      * @param {*} key - Key to get a dependence for.
+     * @param {...*} args - Arguments to bind to a constructor.
      *
      * @returns {*} Dependence.
      */
-    get(key) {
+    get(key, ...args) {
         try {
-            return this.__resolve(this.__container.get(key));
+            return this.__resolve(this.__container.get(key), args);
         } catch (e) {
-            console.error(e);
             console.error(`Undefined key ${key}`);
-        }
-    }
-
-    /**
-     * Returns a dependence after initialize it throw its constructor.
-     * Note: a dependence has to have a constructor.
-     *
-     * @param {*} key - Key to get a dependence for.
-     * @param {...*} args - Arguments to bind to a constructor.
-     *
-     * @returns {Object} Dependence.
-     */
-    new(key, ...args) {
-        try {
-            let Constructor = this.__resolve(this.__container.get(key), true);
-
-            return new Constructor(...args);
-        } catch (e) {
             console.error(e);
-            console.error(`Undefined key ${key}`);
         }
     }
 
@@ -205,7 +192,7 @@ module.exports = class Injector {
         try {
             let target = (value
                     ? value
-                    : this.__resolve(this.__container.get(key), true)
+                    : this.__resolve(this.__container.get(key), [], true)
                 );
 
             if (typeof target == "function") {
@@ -226,8 +213,8 @@ module.exports = class Injector {
 
             throw new Error("This is not constructor.");
         } catch (e) {
-            console.error(e);
             console.error(`Undefined key ${key}`);
+            console.error(e);
         }
     }
 

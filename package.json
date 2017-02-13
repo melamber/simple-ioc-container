@@ -1,52 +1,4 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "simple-ioc-container@^1.0.0",
-        "scope": null,
-        "escapedName": "simple-ioc-container",
-        "name": "simple-ioc-container",
-        "rawSpec": "^1.0.0",
-        "spec": ">=1.0.0 <2.0.0",
-        "type": "range"
-      },
-      "/var/www/csgoteam"
-    ]
-  ],
-  "_from": "simple-ioc-container@>=1.0.0 <2.0.0",
-  "_id": "simple-ioc-container@1.0.1",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/simple-ioc-container",
-  "_nodeVersion": "6.4.0",
-  "_npmOperationalInternal": {
-    "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/simple-ioc-container-1.0.1.tgz_1483868890534_0.6304060043767095"
-  },
-  "_npmUser": {
-    "name": "melamber",
-    "email": "anton.shramkov@gmail.com"
-  },
-  "_npmVersion": "3.10.3",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "simple-ioc-container@^1.0.0",
-    "scope": null,
-    "escapedName": "simple-ioc-container",
-    "name": "simple-ioc-container",
-    "rawSpec": "^1.0.0",
-    "spec": ">=1.0.0 <2.0.0",
-    "type": "range"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/simple-ioc-container/-/simple-ioc-container-1.0.1.tgz",
-  "_shasum": "778c2b9b2247eb4ef834cb2c806a213ea840adb5",
-  "_shrinkwrap": null,
-  "_spec": "simple-ioc-container@^1.0.0",
-  "_where": "/var/www/csgoteam",
   "author": {
     "name": "melamber",
     "email": "anton.shramkov@mail.com"
@@ -58,15 +10,10 @@
   "description": "Simple DI Container",
   "devDependencies": {},
   "directories": {},
-  "dist": {
-    "shasum": "778c2b9b2247eb4ef834cb2c806a213ea840adb5",
-    "tarball": "https://registry.npmjs.org/simple-ioc-container/-/simple-ioc-container-1.0.1.tgz"
-  },
   "engine-strict": true,
   "engines": {
     "node": ">=6"
   },
-  "gitHead": "44cb6da0d69695a3b43fc4148fb101daf2e99ab2",
   "homepage": "https://github.com/melamber/simple-ioc-container",
   "keywords": [
     "DI",
@@ -93,5 +40,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.1.4"
+  "version": "2.0.2"
 }

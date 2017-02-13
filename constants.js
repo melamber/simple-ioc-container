@@ -3,8 +3,8 @@ function define(name, value) {
         value: value,
         enumerable: true
     });
-};
+}
 
 define("CONTAINER_TYPE_VALUE", "value");
-define("CONTAINER_TYPE_CLASS", "class");
-define("CONTAINER_TYPE_SINGLETON", "singleton");
+define("CONTAINER_TYPE_FACTORY", "factory");
+define("CONTAINER_TYPE_SERVICE", "service");
