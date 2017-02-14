@@ -50,7 +50,7 @@
     "url": "git+https://github.com/melamber/simple-ioc-container.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/karma start"
   },
-  "version": "2.0.3"
+  "version": "2.1.0"
 }

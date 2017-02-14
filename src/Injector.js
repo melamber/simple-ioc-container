@@ -1,9 +1,13 @@
-const constants = require("./constants");
-const checkableTypes = {
-    [constants["CONTAINER_TYPE_VALUE"]]: true,
-    [constants["CONTAINER_TYPE_FACTORY"]]: true,
-    [constants["CONTAINER_TYPE_SERVICE"]]: true,
-};
+const {
+    CONTAINER_TYPE_VALUE,
+    CONTAINER_TYPE_FACTORY,
+    CONTAINER_TYPE_SERVICE
+} = require("./constants");
+const checkableTypes = [
+    CONTAINER_TYPE_VALUE,
+    CONTAINER_TYPE_FACTORY,
+    CONTAINER_TYPE_SERVICE
+];
 
 /**
  * Creates a new Injector.
@@ -71,11 +75,12 @@ module.exports = class Injector {
         dependencies.forEach(params => {
             if (!params.key || params.key == null) {
                 throw new Error("Key is not specified.");
-            } else if (!(params.type in checkableTypes)) {
+            } else if (!checkableTypes.includes(params.type)) {
                 throw new Error("Type is invalidated.");
             } else if (!("value" in params)) {
                 throw new Error("Value is not specified.");
             }
+
             if (params.force) {
                 this.__container.delete(params.key);
                 this.__container.set(params.key, params);
@@ -86,6 +91,7 @@ module.exports = class Injector {
                     return;
                 }
             }
+
             if (params.onRegister && typeof params.onRegister == "function") {
                 params.onRegister();
             }
@@ -110,13 +116,13 @@ module.exports = class Injector {
         let Constructor;
 
         switch (dependence.type) {
-        case constants["CONTAINER_TYPE_VALUE"]:
+        case CONTAINER_TYPE_VALUE:
             return dependence.value;
-        case constants["CONTAINER_TYPE_FACTORY"]:
+        case CONTAINER_TYPE_FACTORY:
             Constructor = this.__issueConstructor(dependence);
 
             return needConstructor ? Constructor : new Constructor(...args);
-        case constants["CONTAINER_TYPE_SERVICE"]:
+        case CONTAINER_TYPE_SERVICE:
             if (typeof dependence.value == "object") {
                 return needConstructor
                     ? dependence.value.constructor
@@ -131,7 +137,7 @@ module.exports = class Injector {
 
             this.register({
                 key: dependence.key,
-                type: constants["CONTAINER_TYPE_SERVICE"],
+                type: CONTAINER_TYPE_SERVICE,
                 value: new Constructor(...args),
                 force: true
             });
@@ -173,7 +179,7 @@ module.exports = class Injector {
         try {
             return this.__resolve(this.__container.get(key), args);
         } catch (e) {
-            console.error(`Undefined key ${key}`);
+            console.error(`Undefined key "${key}"`);
             console.error(e);
         }
     }
@@ -213,7 +219,7 @@ module.exports = class Injector {
 
             throw new Error("This is not constructor.");
         } catch (e) {
-            console.error(`Undefined key ${key}`);
+            console.error(`Undefined key "${key}"`);
             console.error(e);
         }
     }

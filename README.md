@@ -133,7 +133,7 @@ di
         key: "userService",
         type: "service",
         value: require(__dirname + "/../services/UserService"),
-        farce: true
+        force: true
     });
 
 const serviceC = di.proxy.userService;
