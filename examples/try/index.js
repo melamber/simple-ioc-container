@@ -1,5 +1,5 @@
-const di = new (require("../../index"));
-const constants = require("../../constants");
+const di = new (require("../../src/index"));
+const constants = require("../../src/constants");
 
 
 class B {

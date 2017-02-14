@@ -1,32 +1,30 @@
 # Simple IoC Container
-###Dependencies: [Proxy](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object.
 ##Installation:
 ````
 npm i simple-ioc-container --save
 ````
 
-
 #API
 
-##properties
-* proxy - Proxy of an injector to intercept services through properties.
+##Properties:
+* **_proxy_** - Proxy of an injector to intercept services through properties.
 
 
-##Methods
+##Methods:
 ###register(...dependencies)
 Registers dependence(ies) in a container with specified params.
 * dependencies {...Object} dependencies - Params of a dependence. Description:
-  * key[required]: {string} dependence key;
-  * type[required]: {enum} ["value", "factory", "service"];
-  * value[required]: {*} Any data. Module will be connected if a type is "class"
+  * _key_[required]: {string} dependence key;
+  * _type_[required]: {enum} ["value", "factory", "service"];
+  * _value_[required]: {*} Any data. Module will be connected if a type is 
+  "factory"
    or "singleton" and a value is set like a string;
-  * args[optional]: {Array} arguments to bind to a constructor.
-  * force[optional]: {bool} registers forcefully if true, otherwise doesn't. 
+  * _force_[optional]: {bool} registers forcefully if true, otherwise doesn't. 
   Default false;
-  * onRegister[optional]: {callback} Invokes if dependence is successfully 
+  * _onRegister_[optional]: {callback} Invokes if a dependence is successfully 
   registered.
 
-Returns an Injector instance (this).
+Returns an Injector instance(this).
 
 
 ###get(key, [...args])

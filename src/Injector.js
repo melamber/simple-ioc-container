@@ -100,9 +100,9 @@ module.exports = class Injector {
      *
      * @param {Object} dependence - Dependence params.
      *                              See {@link Injector#register}.
+     * @param {Array} args - Arguments to bind to a constructor.
      * @param {Boolean} needConstructor - Returns constructor if true
      *                                    otherwise instance. Default false.
-     * @param {...*} args - Arguments to bind to a constructor.
      *
      * @returns {*} Dependence.
      */

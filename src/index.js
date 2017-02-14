@@ -1,3 +1,5 @@
+require("proxy-polyfill/proxy.min.js");
+
 const Injector = require("./Injector");
 
 module.exports = new Proxy(Injector, {
