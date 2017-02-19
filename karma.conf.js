@@ -1,7 +1,8 @@
 module.exports = (config) => {
     config.set({
-        frameworks: ["jasmine"],
+        frameworks: ["mocha", "sinon-chai"],
         files: [
+            "node_modules/babel-polyfill/dist/polyfill.js",
             "test/index.js",
         ],
         preprocessors: {
@@ -9,7 +10,7 @@ module.exports = (config) => {
         },
         webpack: {
             module: {
-                exprContextCritical: false,
+                exprContextCritical: false,  // TODO
                 loaders: [
                     {
                         test: /\.js/,
@@ -26,7 +27,7 @@ module.exports = (config) => {
         webpackServer: {
             noInfo: true
         },
-        browsers: ['PhantomJS'],
+        browsers: ["Chromium", /*"Chrome"*/],
 
         reporters: ["progress"],
         port: 9876,
@@ -38,8 +39,9 @@ module.exports = (config) => {
         concurrency: Infinity,
         plugins: [
             "karma-webpack",
-            "karma-jasmine",
-            "karma-phantomjs-launcher"
+            "karma-mocha",
+            "karma-sinon-chai",
+            "karma-chrome-launcher"
         ],
     })
 };

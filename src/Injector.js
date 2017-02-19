@@ -12,6 +12,8 @@ const checkableTypes = [
 /**
  * Creates a new Injector.
  * @class
+ * @property {object} proxy - Proxy of an Injector instance for simple access to
+ *                            dependencies via properties.
  */
 module.exports = class Injector {
 
@@ -34,23 +36,15 @@ module.exports = class Injector {
             __proto__: null
         });
 
-        this.__setProxy();
-
-        if (dependencies.length > 0) {
-            this.register(dependencies);
-        }
-    }
-
-    /**
-     * Sets proxy.
-     * @protected
-     */
-    __setProxy() {
         this.proxy = new Proxy(this, {
             get(target, prop) {
                 return target.get(prop);
             }
         });
+
+        if (dependencies.length > 0) {
+            this.register(dependencies);
+        }
     }
 
     /**
@@ -96,6 +90,8 @@ module.exports = class Injector {
                 params.onRegister();
             }
         });
+
+        console.log(this.__container.get("dep"), 1);
 
         return this;
     }

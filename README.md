@@ -7,7 +7,8 @@ npm i simple-ioc-container --save
 #API
 
 ##Properties:
-* **_proxy_** - Proxy of an injector to intercept services through properties.
+* **_proxy_** - Proxy of an Injector instance for simple access to dependencies
+                via properties.
 
 
 ##Methods:
@@ -17,8 +18,7 @@ Registers dependence(ies) in a container with specified params.
   * _key_[required]: {string} dependence key;
   * _type_[required]: {enum} ["value", "factory", "service"];
   * _value_[required]: {*} Any data. Module will be connected if a type is 
-  "factory"
-   or "singleton" and a value is set like a string;
+  "factory" or "service" and a value is set like a string;
   * _force_[optional]: {bool} registers forcefully if true, otherwise doesn't. 
   Default false;
   * _onRegister_[optional]: {callback} Invokes if a dependence is successfully 
@@ -37,11 +37,11 @@ Returns a dependence.
 
 ###getConstructor(key, [value])
 Returns a dependence constructor.
-Note: a dependence has to have a constructor.
 * key {*} Key to get a dependence for.
 * value {*} Custom constructor or path to a constructor. Default is null.
 
 Returns a dependence constructor.
+>Note: a dependence has to have a constructor.
 
 
 
@@ -78,7 +78,7 @@ di
         type: "value", // might be specified without any constants
         value: require("./lib/mongoose").default,
         onRegister() {
-            require(__dirname + "/models");
+            require(__dirname + "/schemas");
         }
     })
     .register({
