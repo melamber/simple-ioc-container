@@ -10,8 +10,11 @@ class B {
     }
 }
 
-
 di.register({
+    key: "A",
+    type: constants["CONTAINER_TYPE_SERVICE"],
+    value: __dirname + "/A",
+}).register({
     key: "A",
     type: constants["CONTAINER_TYPE_SERVICE"],
     value: __dirname + "/A",

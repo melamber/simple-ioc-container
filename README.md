@@ -92,7 +92,8 @@ di
     .register({
         key: "config",
         type: CONTAINER_TYPE_VALUE,
-        value: config
+        value: config,
+        force: true
     }, {
          key: "User",
          type: CONTAINER_TYPE_FACTORY,

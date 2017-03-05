@@ -42,9 +42,7 @@ module.exports = class Injector {
             }
         });
 
-        if (dependencies.length > 0) {
-            this.register(dependencies);
-        }
+        this.register(...dependencies);
     }
 
     /**
@@ -67,31 +65,35 @@ module.exports = class Injector {
      */
     register(...dependencies) {
         dependencies.forEach(params => {
-            if (!params.key || params.key == null) {
+            const {key, type, force, onRegister} = params;
+
+            if (!key) {
                 throw new Error("Key is not specified.");
-            } else if (!checkableTypes.includes(params.type)) {
+            } else if (!checkableTypes.includes(type)) {
                 throw new Error("Type is invalidated.");
             } else if (!("value" in params)) {
                 throw new Error("Value is not specified.");
             }
 
-            if (params.force) {
-                this.__container.delete(params.key);
-                this.__container.set(params.key, params);
+            if (force) {
+                this.__container.delete(key);
+                this.__container.set(key, params);
             } else {
-                if (!this.__container.has(params.key)) {
-                    this.__container.set(params.key, params);
+                if (!this.__container.has(key)) {
+                    this.__container.set(key, params);
                 } else {
-                    return;
+                    return console.warn(
+                        "Dependence key '" + key +
+                        "' has already registered. " +
+                        "You should specify flag 'force'."
+                    );
                 }
             }
 
-            if (params.onRegister && typeof params.onRegister == "function") {
-                params.onRegister();
+            if (onRegister && typeof onRegister == "function") {
+                onRegister();
             }
         });
-
-        console.log(this.__container.get("dep"), 1);
 
         return this;
     }

@@ -8,40 +8,57 @@ import {
 
 
 describe("Class Injector", () => {
-    // beforeEach(() => {
-    //
-    // }));
 
     it("constructor()", () => {
-        const di = new Injector({
-            key: "dep",
+        sinon.spy(Injector.prototype, "register");
+
+        const dep1 = {
+            key: "dep1",
             type: CONTAINER_TYPE_VALUE,
-            value: {a: true},
-        });
-        console.log(di.proxy.dep);
+            value: "dependence",
+        };
+        const dep2 = {
+            key: "dep2",
+            type: CONTAINER_TYPE_VALUE,
+            value: "dependence",
+        };
+
+        const di = new Injector(dep1, dep2);
 
         expect(di).to.be.instanceOf(InjectorClass);
         expect(di.proxy).to.be.instanceOf(InjectorClass);
-        expect(di.proxy.dep.a).to.be.true;
+        expect(di.register).to.have.been
+            .calledOnce
+            .calledWithExactly(dep1, dep2);
     });
 
-    it("calls the original function", () => {
-        const spy = sinon.spy();
-        const proxy = function(callback) {
-            callback()
-        };
-
-        //console.log(sinon.spy());
-        proxy(spy);
-        assert(spy.called);
-        //expect(spy).to.have.been.calledWith('Greeting: James');
-
-        expect(spy).to.have.been.calledOnce;
-    });
-
-    it("__setProxy()", () => {
+    it("register", () => {
         const di = new Injector();
 
-        expect(di.proxy).to.be.instanceOf(InjectorClass);
+        di.register({
+            key: "dep1",
+            type: CONTAINER_TYPE_VALUE,
+            value: {a: true},
+        }, {
+            key: "dep2",
+            type: CONTAINER_TYPE_SERVICE,
+            value: class A {},
+        }).register({
+            key: "dep3",
+            type: CONTAINER_TYPE_FACTORY,
+            value: class B {
+                constructor({dep1, dep2}, arg) {
+                    this.dep1 = dep1;
+                    this.dep2 = dep2;
+                    this.arg = arg;
+                };
+            },
+        });
+
+
+
+        expect(di.proxy.dep1).to.be.ok;
+        expect(di.proxy.dep2).to.be.ok;
+
     });
 });
