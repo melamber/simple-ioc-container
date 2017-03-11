@@ -1,10 +1,14 @@
 import Injector from "../src";
+import {assert} from "chai";
 import InjectorClass from "../src/Injector";
+import ConstructorA from "./src/A";
+import ConstructorB from "./src/B";
 import {
     CONTAINER_TYPE_VALUE,
     CONTAINER_TYPE_FACTORY,
     CONTAINER_TYPE_SERVICE,
 } from "../src/constants";
+
 
 
 describe("Class Injector", () => {
@@ -25,40 +29,48 @@ describe("Class Injector", () => {
 
         const di = new Injector(dep1, dep2);
 
-        expect(di).to.be.instanceOf(InjectorClass);
-        expect(di.proxy).to.be.instanceOf(InjectorClass);
-        expect(di.register).to.have.been
+        expect(di).instanceOf(InjectorClass);
+        expect(di.proxy).instanceOf(InjectorClass);
+        expect(di.register)
             .calledOnce
             .calledWithExactly(dep1, dep2);
     });
 
-    it("register", () => {
+    it("register()", () => {
         const di = new Injector();
+        const sampleObj = {a: true};
+        const onRegister = sinon.spy();
 
         di.register({
             key: "dep1",
             type: CONTAINER_TYPE_VALUE,
-            value: {a: true},
+            value: sampleObj,
         }, {
             key: "dep2",
             type: CONTAINER_TYPE_SERVICE,
-            value: class A {},
+            value: require("./src/A"),
+            onRegister,
         }).register({
             key: "dep3",
             type: CONTAINER_TYPE_FACTORY,
-            value: class B {
-                constructor({dep1, dep2}, arg) {
-                    this.dep1 = dep1;
-                    this.dep2 = dep2;
-                    this.arg = arg;
-                };
-            },
+            value: require("./src/B"),
+        }).register({
+            key: "dep4",
+            type: CONTAINER_TYPE_VALUE,
+            value: ConstructorA,
         });
 
+        assert(onRegister.calledOnce);
 
+        const dep1 = di.proxy.dep1;
 
-        expect(di.proxy.dep1).to.be.ok;
-        expect(di.proxy.dep2).to.be.ok;
-
+        expect(dep1)
+            .equal(sampleObj)
+            .equal(di.get("dep1"))
+            .deep.equal({a: true});
+        expect(di.proxy.dep2)
+            .instanceOf(ConstructorA)
+            .equal(di.get("dep2"))
+            .deep.equal(new ConstructorA);
     });
 });

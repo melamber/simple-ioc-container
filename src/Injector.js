@@ -9,6 +9,7 @@ const checkableTypes = [
     CONTAINER_TYPE_SERVICE
 ];
 
+
 /**
  * Creates a new Injector.
  * @class

@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = (config) => {
     config.set({
         frameworks: ["mocha", "sinon-chai"],
@@ -28,7 +30,6 @@ module.exports = (config) => {
             noInfo: true
         },
         browsers: ["Chromium", /*"Chrome"*/],
-
         reporters: ["progress"],
         port: 9876,
         colors: true,
