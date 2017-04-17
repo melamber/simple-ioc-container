@@ -9,68 +9,138 @@ import {
     CONTAINER_TYPE_SERVICE,
 } from "../src/constants";
 
+const sandboxOfRegister = sinon.sandbox.create();
 
 
 describe("Class Injector", () => {
+    describe("Initialization", () => {
+        it("constructor()", () => {
+            sandboxOfRegister.spy(Injector.prototype, "register");
 
-    it("constructor()", () => {
-        sinon.spy(Injector.prototype, "register");
+            const dep1 = {
+                key: "dep1",
+                type: CONTAINER_TYPE_VALUE,
+                value: "dependence",
+            };
+            const dep2 = {
+                key: "dep2",
+                type: CONTAINER_TYPE_VALUE,
+                value: "dependence",
+            };
 
-        const dep1 = {
-            key: "dep1",
-            type: CONTAINER_TYPE_VALUE,
-            value: "dependence",
-        };
-        const dep2 = {
-            key: "dep2",
-            type: CONTAINER_TYPE_VALUE,
-            value: "dependence",
-        };
+            const di = new Injector(dep1, dep2);
 
-        const di = new Injector(dep1, dep2);
+            expect(di).instanceOf(InjectorClass);
+            expect(di.proxy).instanceOf(InjectorClass);
+            expect(di.register)
+                .calledOnce
+                .calledWithExactly(dep1, dep2);
 
-        expect(di).instanceOf(InjectorClass);
-        expect(di.proxy).instanceOf(InjectorClass);
-        expect(di.register)
-            .calledOnce
-            .calledWithExactly(dep1, dep2);
+            sandboxOfRegister.restore();
+        });
     });
 
-    it("register()", () => {
-        const di = new Injector();
-        const sampleObj = {a: true};
-        const onRegister = sinon.spy();
+    describe("API and inner methods", () => {
+        let di, sampleObj, onRegister;
 
-        di.register({
-            key: "dep1",
-            type: CONTAINER_TYPE_VALUE,
-            value: sampleObj,
-        }, {
-            key: "dep2",
-            type: CONTAINER_TYPE_SERVICE,
-            value: require("./src/A"),
-            onRegister,
-        }).register({
-            key: "dep3",
-            type: CONTAINER_TYPE_FACTORY,
-            value: require("./src/B"),
-        }).register({
-            key: "dep4",
-            type: CONTAINER_TYPE_VALUE,
-            value: ConstructorA,
+        before(() => {
+            di = new Injector();
+            sampleObj = {a: true};
+            onRegister = sinon.spy();
+
+            di.register({
+                key: "dep1",
+                type: CONTAINER_TYPE_VALUE,
+                value: true,
+            }, {
+                key: "dep1",
+                type: CONTAINER_TYPE_VALUE,
+                value: sampleObj,
+                force: true,
+            }, {
+                key: "dep1",
+                type: CONTAINER_TYPE_VALUE,
+                value: true,
+            }, {
+                key: "dep2",
+                type: CONTAINER_TYPE_SERVICE,
+                value: require("./src/A"),
+                onRegister,
+            }).register({
+                key: "dep3",
+                type: CONTAINER_TYPE_FACTORY,
+                value: require("./src/B"),
+            }).register({
+                key: "dep4",
+                type: CONTAINER_TYPE_VALUE,
+                value: ConstructorA,
+            });
         });
 
-        assert(onRegister.calledOnce);
+        describe("register()", () => {
+            it("should throw an exception", () => {
+                sandboxOfRegister.spy(di, "register");
 
-        const dep1 = di.proxy.dep1;
+                try {
+                    di.register({
+                        type: CONTAINER_TYPE_VALUE,
+                        value: true,
+                    });
+                } catch (e) {}
+                try {
+                    di.register({
+                        key: "dep1",
+                        value: true,
+                    });
+                } catch (e) {}
+                try {
+                    di.register({
+                        key: "dep1",
+                        type: CONTAINER_TYPE_VALUE,
+                    });
+                } catch (e) {}
 
-        expect(dep1)
-            .equal(sampleObj)
-            .equal(di.get("dep1"))
-            .deep.equal({a: true});
-        expect(di.proxy.dep2)
-            .instanceOf(ConstructorA)
-            .equal(di.get("dep2"))
-            .deep.equal(new ConstructorA);
+                assert(di.register.alwaysThrew("Error"));
+            });
+
+            it("should save dependencies into container", () => {
+                assert(onRegister.calledOnce);
+                expect(di.__container.size).equal(4);
+                expect(di.__container.get("dep1")).deep.equal({
+                    key: "dep1",
+                    type: CONTAINER_TYPE_VALUE,
+                    value: sampleObj,
+                    force: true,
+                });
+                expect(di.__container.get("dep2")).deep.equal({
+                    key: "dep2",
+                    type: CONTAINER_TYPE_SERVICE,
+                    value: require("./src/A"),
+                    onRegister,
+                });
+                expect(di.__container.get("dep3")).deep.equal({
+                    key: "dep3",
+                    type: CONTAINER_TYPE_FACTORY,
+                    value: require("./src/B"),
+                });
+            });
+        });
+
+        it("__resolve()", () => {
+
+        });
+
+        it("saved dependencies must be correct", () => {
+            /*const dep1 = di.proxy.dep1;
+
+             expect(dep1)
+             .equal(sampleObj)
+             .equal(di.get("dep1"))
+             .deep.equal({a: true});
+             expect(di.proxy.dep2)
+             .instanceOf(ConstructorA)
+             .equal(di.get("dep2"))
+             .deep.equal(new ConstructorA);*/
+        });
     });
 });
