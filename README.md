@@ -3,6 +3,9 @@
 ````
 npm i simple-ioc-container --save
 ````
+It's really simple DI container with two main methods "register()" and "get()"
+to manipulate dependencies. This package has one dependence and suits for
+a front and back side code. Injection is implemented really simply as well (see examples). 
 
 #API
 
