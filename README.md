@@ -38,10 +38,9 @@ Returns a dependence by a key.
 Returns a dependence.
 
 
-###getConstructor(key, [value])
+###getConstructor(key)
 Returns a dependence constructor.
 * key {*} Key to get a dependence for.
-* value {*} Custom constructor or path to a constructor. Default is null.
 
 Returns a dependence constructor.
 >Note: a dependence has to have a constructor.
@@ -91,25 +90,21 @@ di
     });
 
 // or if are not reciprocal dependencies
-di
-    .register({
-        key: "config",
-        type: CONTAINER_TYPE_VALUE,
-        value: config,
-        force: true
-    }, {
-         key: "User",
-         type: CONTAINER_TYPE_FACTORY,
-         value: "/../models/User"
-    })
+di.register({
+    key: "config",
+    type: CONTAINER_TYPE_VALUE,
+    value: config,
+    force: true
+}, {
+     key: "User",
+     type: CONTAINER_TYPE_FACTORY,
+     value: "/../models/User"
+})
     
 ````
 
 ````javascript
 // models/User.js
-
-import di from "../di";
-
 
 module.exports = class User {
    
@@ -132,20 +127,21 @@ const serviceA = di.get("userService", "something");
 const admin = di.get("User", "007");
 const serviceB = di.proxy.userService;
 
-di
-    .register({
-        key: "userService",
-        type: "service",
-        value: require(__dirname + "/../services/UserService"),
-        force: true
-    });
+di.register({
+    key: "userService",
+    type: "service",
+    value: require(__dirname + "/../services/UserService"),
+    force: true
+});
 
 const serviceC = di.proxy.userService;
 
-// admin instanceof User => true
-// admin.userService == serviceA  => true
-// serviceA == serviceB => true
-// serviceA == serviceC => false
+/*
+    admin instanceof User => true
+    admin.userService == serviceA  => true
+    serviceA == serviceB => true
+    serviceA == serviceC => false
+*/
 
 ````
 

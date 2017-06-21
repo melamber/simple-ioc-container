@@ -112,32 +112,26 @@ module.exports = class Injector {
      * @returns {*} Dependence.
      */
     __resolve(dependence, args = [], needConstructor = false) {
-        let Constructor;
-
         switch (dependence.type) {
         case CONTAINER_TYPE_VALUE:
             return dependence.value;
         case CONTAINER_TYPE_FACTORY:
-            Constructor = this.__issueConstructor(dependence);
-
-            return needConstructor ? Constructor : new Constructor(...args);
+            return needConstructor
+                ? this.getConstructor(null, dependence.value)
+                : new (this.__issueProxyConstructor(dependence))(...args);
         case CONTAINER_TYPE_SERVICE:
             if (typeof dependence.value == "object") {
                 return needConstructor
                     ? dependence.value.constructor
                     : dependence.value;
-            }
-
-            Constructor = this.__issueConstructor(dependence);
-
-            if (needConstructor) {
-                return Constructor;
+            } else if (needConstructor) {
+                return this.getConstructor(null, dependence.value);
             }
 
             this.register({
                 key: dependence.key,
                 type: CONTAINER_TYPE_SERVICE,
-                value: new Constructor(...args),
+                value: new (this.__issueProxyConstructor(dependence))(...args),
                 force: true
             });
 
@@ -153,7 +147,7 @@ module.exports = class Injector {
      *                              See {@link Injector#register}.
      * @returns {*} Constructor with bound args.
      */
-    __issueConstructor(dependence) {
+    __issueProxyConstructor(dependence) {
         const Constructor = this.getConstructor(null, dependence.value);
         const proxy = this.proxy;
 
@@ -188,7 +182,7 @@ module.exports = class Injector {
      * Note: a dependence has to have a constructor.
      *
      * @param {*} key - Key to get a dependence for.
-     * @param {*} value - Custom constructor or path to a constructor.
+     * @param {*} value - Custom constructor or path to a constructor. (inner)
      *
      * @returns {Function} Dependence constructor.
      * @throws Error
@@ -213,10 +207,14 @@ module.exports = class Injector {
                     return constructor;
                 }
             } else if (typeof target == "object") {
+                if (value.__esModule) {
+                    return value.default;
+                }
+
                 return target.constructor;
             }
 
-            throw new Error("This is not constructor.");
+            throw new Error("This is not a constructor.");
         } catch (e) {
             console.error(`Undefined key "${key}"`);
             console.error(e);

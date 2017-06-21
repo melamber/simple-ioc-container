@@ -30,11 +30,17 @@ module.exports = (config) => {
             noInfo: true
         },
         browsers: ["Chromium", /*"Chrome"*/],
-        reporters: ["progress"],
+        reporters: ["progress", "verbose"],
+        client: {
+            captureConsole: true,
+            mocha: {
+                bail: true
+            }
+        },
         port: 9876,
         colors: true,
-        autoWatch: false,
-        singleRun: true,
+        autoWatch: true,
+        singleRun: false,
         // config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
         concurrency: Infinity,
@@ -42,7 +48,8 @@ module.exports = (config) => {
             "karma-webpack",
             "karma-mocha",
             "karma-sinon-chai",
-            "karma-chrome-launcher"
+            "karma-chrome-launcher",
+            "karma-verbose-reporter",
         ],
     })
 };

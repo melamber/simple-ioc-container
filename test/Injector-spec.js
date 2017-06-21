@@ -126,21 +126,48 @@ describe("Class Injector", () => {
             });
         });
 
-        it("__resolve()", () => {
+        describe("__resolve()", () => {
+            it("should return a correct dependence by a key", () => {
+                expect(di.__resolve(
+                    di.__container.get("dep1"), [], true)
+                ).equal(sampleObj);
+                expect(di.__resolve(
+                    di.__container.get("dep1"), ['a', 'b'], false)
+                ).equal(sampleObj);
+                expect(di.__resolve(
+                    di.__container.get("dep2"), ['a', 'b'], true
+                )).equal(require("./src/A"));
+                expect(di.__resolve(
+                    di.__container.get("dep2"), ['a', 'b'], false
+                )).instanceOf(ConstructorA);
+                expect(di.__resolve(
+                    di.__container.get("dep3"), ['a', 'b'], true
+                )).equal(ConstructorB);
+                expect(di.__resolve(
+                    di.__container.get("dep3"), ['a', 'b'], false
+                )).instanceOf(ConstructorB);
+                expect(di.__resolve(
+                    di.__container.get("dep4"), ['a', 'b'], true
+                )).equal(ConstructorA);
+                expect(di.__resolve(
+                    di.__container.get("dep4"), ['a', 'b'], false
+                )).equal(ConstructorA);
+            });
 
+            it("lazy loading for service type", () => {
+                /*const dep1 = di.proxy.dep1;
+
+                 expect(dep1)
+                 .equal(sampleObj)
+                 .equal(di.get("dep1"))
+                 .deep.equal({a: true});
+                 expect(di.proxy.dep2)
+                 .instanceOf(ConstructorA)
+                 .equal(di.get("dep2"))
+                 .deep.equal(new ConstructorA);*/
+            });
         });
 
-        it("saved dependencies must be correct", () => {
-            /*const dep1 = di.proxy.dep1;
 
-             expect(dep1)
-             .equal(sampleObj)
-             .equal(di.get("dep1"))
-             .deep.equal({a: true});
-             expect(di.proxy.dep2)
-             .instanceOf(ConstructorA)
-             .equal(di.get("dep2"))
-             .deep.equal(new ConstructorA);*/
-        });
     });
 });
