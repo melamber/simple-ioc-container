@@ -132,8 +132,8 @@ describe("Class Injector", () => {
                     di.__container.get("dep1"), [], true)
                 ).equal(sampleObj);
                 expect(di.__resolve(
-                    di.__container.get("dep1"), ['a', 'b'], false)
-                ).equal(sampleObj);
+                    di.__container.get("dep1"), ['a', 'b'], false
+                )).equal(sampleObj);
                 expect(di.__resolve(
                     di.__container.get("dep2"), ['a', 'b'], true
                 )).equal(require("./src/A"));
@@ -152,6 +152,7 @@ describe("Class Injector", () => {
                 expect(di.__resolve(
                     di.__container.get("dep4"), ['a', 'b'], false
                 )).equal(ConstructorA);
+                // TODO arguments
             });
 
             it("lazy loading for service type", () => {
@@ -167,7 +168,5 @@ describe("Class Injector", () => {
                  .deep.equal(new ConstructorA);*/
             });
         });
-
-
     });
 });

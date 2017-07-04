@@ -47,7 +47,7 @@ Returns a dependence constructor.
 
 
 
-###Examples
+##Examples
 
 ````javascript
 // di.js
@@ -65,7 +65,7 @@ import {
     CONTAINER_TYPE_VALUE,
     CONTAINER_TYPE_FACTORY,
     CONTAINER_TYPE_SERVICE
-} from "simple-ioc-container/constants";
+} from "simple-ioc-container/src/constants";
 import di from "./di";
 import config from "../etc/config";
 
