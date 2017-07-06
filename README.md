@@ -108,7 +108,9 @@ di.register({
 
 module.exports = class User {
    
-    constructor({userService, config, db}, id) {
+    constructor(id) {
+        const {userService, config, db} = this._di;
+        
         this.userService = userService;
         // id => 007 in this example
         // userService, config and db are registered dependencies from di

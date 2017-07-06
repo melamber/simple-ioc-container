@@ -153,7 +153,7 @@ module.exports = class Injector {
 
         return new Proxy(Constructor, {
             construct(target, args) {
-                args.unshift(proxy);
+                target.prototype._di = proxy;
 
                 return new target(...args);
             }

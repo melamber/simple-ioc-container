@@ -3,7 +3,8 @@ const constants = require("../../src/constants");
 
 
 class B {
-    constructor({A}, firstArg) {
+    constructor(firstArg) {
+        const {A} = this._di;
         this.signature = `B(${Math.random()})`;
         this.A = A;
         this.firstArg = firstArg;
