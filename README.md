@@ -1,5 +1,5 @@
 # Simple IoC Container
-##Installation:
+## Installation:
 ````
 npm i simple-ioc-container --save
 ````
@@ -7,15 +7,15 @@ It's really simple DI container with two main methods "register()" and "get()"
 to manipulate dependencies. This package has one dependence and suits for
 a front and back side code. Injection is implemented really simply as well (see examples). 
 
-#API
+# API
 
-##Properties:
+## Properties:
 * **_proxy_** - Proxy of an Injector instance for simple access to dependencies
                 via properties.
 
 
-##Methods:
-###register(...dependencies)
+## Methods:
+### register(...dependencies)
 Registers dependence(ies) in a container with specified params.
 * dependencies {...Object} dependencies - Params of a dependence. Description:
   * _key_[required]: {string} dependence key;
@@ -30,7 +30,7 @@ Registers dependence(ies) in a container with specified params.
 Returns an Injector instance(this).
 
 
-###get(key, [...args])
+### get(key, [...args])
 Returns a dependence by a key.
 * key {*} Key to get a dependence for.
 * args {...*} Arguments to bind to a constructor..
@@ -38,7 +38,7 @@ Returns a dependence by a key.
 Returns a dependence.
 
 
-###getConstructor(key)
+### getConstructor(key)
 Returns a dependence constructor.
 * key {*} Key to get a dependence for.
 
@@ -47,7 +47,7 @@ Returns a dependence constructor.
 
 
 
-##Examples
+## Examples
 
 ````javascript
 // di.js
@@ -147,6 +147,6 @@ const serviceC = di.proxy.userService;
 
 ````
 
-####todo
+#### todo
 * tests
 * improving the docs
